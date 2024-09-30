@@ -1,9 +1,10 @@
 package uz.ccrew.internetmarket.config;
 
-import org.springframework.data.domain.AuditorAware;
-import org.springframework.stereotype.Component;
-import uz.ccrew.internetmarket.util.AuthUtil;
 import uz.ccrew.internetmarket.entity.User;
+import uz.ccrew.internetmarket.util.AuthUtil;
+
+import org.springframework.stereotype.Component;
+import org.springframework.data.domain.AuditorAware;
 
 import java.util.Optional;
 

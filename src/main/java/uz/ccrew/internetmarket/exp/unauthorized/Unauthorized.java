@@ -1,7 +1,8 @@
 package uz.ccrew.internetmarket.exp.unauthorized;
 
-import org.springframework.http.HttpStatus;
 import uz.ccrew.internetmarket.exp.BasicException;
+
+import org.springframework.http.HttpStatus;
 
 public class Unauthorized extends BasicException {
     public Unauthorized() {

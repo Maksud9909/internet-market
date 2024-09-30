@@ -18,8 +18,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import uz.ccrew.assignmentservice.security.jwt.JWTAuthenticationFilter;
-import uz.ccrew.assignmentservice.security.user.UserAuthenticationEntryPoint;
+import uz.ccrew.internetmarket.security.jwt.JWTAuthenticationFilter;
+import uz.ccrew.internetmarket.security.user.UserAuthenticationEntryPoint;
 
 @Configuration
 @EnableWebSecurity
