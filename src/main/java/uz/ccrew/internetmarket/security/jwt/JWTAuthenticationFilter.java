@@ -1,5 +1,9 @@
 package uz.ccrew.internetmarket.security.jwt;
 
+import uz.ccrew.internetmarket.security.user.UserDetailsImpl;
+import uz.ccrew.internetmarket.security.user.UserDetailsServiceImpl;
+import uz.ccrew.internetmarket.exp.unauthorized.TokenExpiredException;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,9 +18,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
-import uz.ccrew.assignmentservice.exp.unauthorized.TokenExpiredException;
-import uz.ccrew.assignmentservice.security.user.UserDetailsImpl;
-import uz.ccrew.assignmentservice.security.user.UserDetailsServiceImpl;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

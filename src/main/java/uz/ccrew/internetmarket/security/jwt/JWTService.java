@@ -1,10 +1,10 @@
 package uz.ccrew.internetmarket.security.jwt;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
