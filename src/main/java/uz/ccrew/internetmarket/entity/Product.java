@@ -13,9 +13,10 @@ import jakarta.persistence.*;
 public class Product extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JoinColumn(name = "product_id")
+    @Column(name = "product_id")
     private Long productId;
 
+    
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -25,6 +26,4 @@ public class Product extends Auditable {
     private String description;
 
     private Double price;
-
-    private Long quantity;
 }
