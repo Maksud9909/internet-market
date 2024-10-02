@@ -16,12 +16,12 @@ public class Product extends Auditable {
     @Column(name = "product_id")
     private Long productId;
 
-    
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    private String name;
+    @Column(name = "product_name")
+    private String productName;
 
     private String description;
 

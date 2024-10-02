@@ -1,7 +1,7 @@
 package uz.ccrew.internetmarket.dto.auth;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Request body for Registration")
 public record RegisterDTO(@NotBlank(message = "Login must not be blank")
@@ -9,5 +9,4 @@ public record RegisterDTO(@NotBlank(message = "Login must not be blank")
                           String login,
                           @NotBlank(message = "Login must not be blank")
                           @Schema(description = "password", example = "12345")
-                          String password) {
-}
+                          String password) {}

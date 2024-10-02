@@ -1,22 +1,23 @@
 package uz.ccrew.internetmarket.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import uz.ccrew.internetmarket.dto.Response;
+import uz.ccrew.internetmarket.dto.user.UserDTO;
+import uz.ccrew.internetmarket.dto.ResponseMaker;
+import uz.ccrew.internetmarket.dto.auth.LoginDTO;
+import uz.ccrew.internetmarket.service.AuthService;
+import uz.ccrew.internetmarket.dto.auth.RegisterDTO;
+import uz.ccrew.internetmarket.dto.auth.LoginResponseDTO;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uz.ccrew.internetmarket.dto.Response;
-import uz.ccrew.internetmarket.dto.ResponseMaker;
-import uz.ccrew.internetmarket.dto.auth.LoginDTO;
-import uz.ccrew.internetmarket.dto.auth.LoginResponseDTO;
-import uz.ccrew.internetmarket.dto.auth.RegisterDTO;
-import uz.ccrew.internetmarket.dto.user.UserDTO;
-import uz.ccrew.internetmarket.service.AuthService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("/api/v1/auth")
