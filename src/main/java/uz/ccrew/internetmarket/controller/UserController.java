@@ -1,12 +1,12 @@
 package uz.ccrew.internetmarket.controller;
 
-import lombok.RequiredArgsConstructor;
 import uz.ccrew.internetmarket.dto.Response;
 import uz.ccrew.internetmarket.dto.user.UserDTO;
 import uz.ccrew.internetmarket.dto.ResponseMaker;
 import uz.ccrew.internetmarket.service.UserService;
 import uz.ccrew.internetmarket.dto.user.UserUpdateDTO;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;

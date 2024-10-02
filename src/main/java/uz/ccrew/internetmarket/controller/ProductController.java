@@ -2,17 +2,17 @@ package uz.ccrew.internetmarket.controller;
 
 import uz.ccrew.internetmarket.dto.Response;
 import uz.ccrew.internetmarket.dto.ResponseMaker;
-import uz.ccrew.internetmarket.dto.product.ProductCreateDTO;
 import uz.ccrew.internetmarket.dto.product.ProductDTO;
-import uz.ccrew.internetmarket.dto.product.ProductUpdateDTO;
 import uz.ccrew.internetmarket.service.ProductService;
+import uz.ccrew.internetmarket.dto.product.ProductCreateDTO;
+import uz.ccrew.internetmarket.dto.product.ProductUpdateDTO;
 
 import lombok.RequiredArgsConstructor;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.*;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
