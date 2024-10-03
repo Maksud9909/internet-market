@@ -30,6 +30,7 @@ public class OrderMapper implements Mapper<OrderDTO, OrderDTO, Order> {
         return OrderDTO.builder()
                 .totalPrice(order.getTotalPrice())
                 .status(order.getStatus())
+                .orderId(order.getOrderId())
                 .userId(order.getUser().getId())
                 .build();
     }
