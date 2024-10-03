@@ -1,8 +1,9 @@
 package uz.ccrew.internetmarket.mapper;
 
-import org.springframework.stereotype.Component;
-import uz.ccrew.internetmarket.dto.user.UserDTO;
 import uz.ccrew.internetmarket.entity.User;
+import uz.ccrew.internetmarket.dto.user.UserDTO;
+
+import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper implements Mapper<UserDTO, UserDTO, User> {

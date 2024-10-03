@@ -1,7 +1,8 @@
 package uz.ccrew.internetmarket.repository;
 
-import org.springframework.stereotype.Repository;
 import uz.ccrew.internetmarket.entity.OrderProducts;
+
+import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrderProductsRepository extends BasicRepository<OrderProducts, Long> {}

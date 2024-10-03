@@ -1,8 +1,9 @@
 package uz.ccrew.internetmarket.service;
 
-import org.springframework.data.domain.Page;
 import uz.ccrew.internetmarket.dto.user.UserDTO;
 import uz.ccrew.internetmarket.dto.user.UserUpdateDTO;
+
+import org.springframework.data.domain.Page;
 
 public interface UserService {
     UserDTO get();

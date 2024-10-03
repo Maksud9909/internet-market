@@ -1,11 +1,12 @@
 package uz.ccrew.internetmarket.mapper;
 
+import uz.ccrew.internetmarket.entity.User;
+import uz.ccrew.internetmarket.entity.Order;
+import uz.ccrew.internetmarket.dto.order.OrderDTO;
+import uz.ccrew.internetmarket.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uz.ccrew.internetmarket.dto.order.OrderDTO;
-import uz.ccrew.internetmarket.entity.Order;
-import uz.ccrew.internetmarket.entity.User;
-import uz.ccrew.internetmarket.repository.UserRepository;
 
 import java.util.Optional;
 

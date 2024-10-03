@@ -1,12 +1,13 @@
 package uz.ccrew.internetmarket.mapper;
 
+import uz.ccrew.internetmarket.entity.Product;
+import uz.ccrew.internetmarket.entity.Category;
+import uz.ccrew.internetmarket.dto.product.ProductDTO;
+import uz.ccrew.internetmarket.dto.product.ProductCreateDTO;
+import uz.ccrew.internetmarket.repository.CategoryRepository;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import uz.ccrew.internetmarket.dto.product.ProductCreateDTO;
-import uz.ccrew.internetmarket.dto.product.ProductDTO;
-import uz.ccrew.internetmarket.entity.Category;
-import uz.ccrew.internetmarket.entity.Product;
-import uz.ccrew.internetmarket.repository.CategoryRepository;
 
 @Component
 @RequiredArgsConstructor

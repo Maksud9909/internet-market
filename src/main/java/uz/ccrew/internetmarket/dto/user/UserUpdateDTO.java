@@ -1,7 +1,8 @@
 package uz.ccrew.internetmarket.dto.user;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import uz.ccrew.internetmarket.enums.UserRole;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Request body for update")
 public record UserUpdateDTO(@Schema(description = "login", example = "john")

@@ -1,28 +1,28 @@
 package uz.ccrew.internetmarket.service.impl;
 
-import uz.ccrew.internetmarket.dto.auth.LoginDTO;
-import uz.ccrew.internetmarket.dto.auth.LoginResponseDTO;
-import uz.ccrew.internetmarket.dto.auth.RegisterDTO;
-import uz.ccrew.internetmarket.dto.user.UserDTO;
 import uz.ccrew.internetmarket.entity.User;
-import uz.ccrew.internetmarket.enums.UserRole;
-import uz.ccrew.internetmarket.exp.AlreadyExistException;
-import uz.ccrew.internetmarket.mapper.UserMapper;
-import uz.ccrew.internetmarket.repository.UserRepository;
-import uz.ccrew.internetmarket.security.jwt.JWTService;
-import uz.ccrew.internetmarket.security.user.UserDetailsImpl;
-import uz.ccrew.internetmarket.service.AuthService;
 import uz.ccrew.internetmarket.util.AuthUtil;
+import uz.ccrew.internetmarket.enums.UserRole;
+import uz.ccrew.internetmarket.dto.user.UserDTO;
+import uz.ccrew.internetmarket.dto.auth.LoginDTO;
+import uz.ccrew.internetmarket.mapper.UserMapper;
+import uz.ccrew.internetmarket.service.AuthService;
+import uz.ccrew.internetmarket.dto.auth.RegisterDTO;
+import uz.ccrew.internetmarket.security.jwt.JWTService;
+import uz.ccrew.internetmarket.exp.AlreadyExistException;
+import uz.ccrew.internetmarket.repository.UserRepository;
+import uz.ccrew.internetmarket.dto.auth.LoginResponseDTO;
+import uz.ccrew.internetmarket.security.user.UserDetailsImpl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
