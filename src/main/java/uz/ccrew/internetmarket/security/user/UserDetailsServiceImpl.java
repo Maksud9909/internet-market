@@ -1,6 +1,5 @@
 package uz.ccrew.internetmarket.security.user;
 
-
 import uz.ccrew.internetmarket.entity.User;
 import uz.ccrew.internetmarket.repository.UserRepository;
 

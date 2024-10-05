@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница заказов</title>
+</head>
+<body>
+<h1>Заказы</h1>
+
+<button id="createOrderBtn">Создать заказ</button>
+<div id="ordersList"></div>
+
+<script>
+    const token = localStorage.getItem('accessToken');
+    console.log('Токен доступа:', token); // Для отладки
+    if (!token) {
+        window.location.href = '/index.html';
+    }
+
+    async function fetchOrders() {
+        try {
+            console.log(token);
+            const response = await fetch('/api/v1/order/get/list', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Access-Control-Allow-Origin': '*'
+                }
+            });
+
+            if (!response.ok) {
+                console.log(response);
+                throw new Error('Ошибка авторизации. Перейдите на страницу входа.');
+            }
+
+            const orders = await response.json();
+            document.getElementById('ordersList').textContent = JSON.stringify(orders, null, 2);
+        } catch (error) {
+            alert(error.message);
+            localStorage.removeItem('accessToken');
+            window.location.href = '/index.html';
+        }
+    }
+
+    document.getElementById('createOrderBtn').addEventListener('click', async () => {
+        try {
+            const response = await fetch('/api/v1/order/create/order', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Access-Control-Allow-Origin': '*'
+                }
+            });
+
+            if (!response.ok) {
+                console.log(response);
+                console.log(token);
+                throw new Error('Ошибка создания заказа. Авторизация не пройдена.');
+            }
+
+            fetchOrders();
+        } catch (error) {
+            alert(error.message);
+            localStorage.removeItem('accessToken');
+            window.location.href = '/index.html';
+        }
+    });
+
+    fetchOrders();
+</script>
+</body>
+</html>

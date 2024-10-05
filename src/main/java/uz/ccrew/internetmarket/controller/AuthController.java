@@ -1,5 +1,6 @@
 package uz.ccrew.internetmarket.controller;
 
+import org.springframework.web.bind.annotation.*;
 import uz.ccrew.internetmarket.dto.Response;
 import uz.ccrew.internetmarket.dto.user.UserDTO;
 import uz.ccrew.internetmarket.dto.ResponseMaker;
@@ -13,16 +14,13 @@ import lombok.RequiredArgsConstructor;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Tag(name = "Auth Controller", description = "Authorization API")
+@CrossOrigin(origins = "*")
 public class AuthController {
     private final AuthService authService;
 

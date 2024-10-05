@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Интернет-магазин</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 300px;
+            margin-bottom: 20px;
+        }
+        input, button {
+            padding: 5px;
+        }
+        #message, #debug {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .error { color: red; }
+        .success { color: green; }
+        #debug { color: blue; }
+    </style>
+</head>
+<body>
+<h1>Интернет-магазин</h1>
+
+<h2>Регистрация</h2>
+<form id="registerForm">
+    <input type="text" id="registerLogin" placeholder="Логин" required>
+    <input type="password" id="registerPassword" placeholder="Пароль" required>
+    <button type="submit">Зарегистрироваться</button>
+</form>
+
+<h2>Вход</h2>
+<form id="loginForm">
+    <input type="text" id="loginLogin" placeholder="Логин" required>
+    <input type="password" id="loginPassword" placeholder="Пароль" required>
+    <button type="submit">Войти</button>
+</form>
+
+<div id="message"></div>
+<div id="debug"></div>
+
+<script>
+    const API_URL = '/api/v1/auth';
+
+    async function sendRequest(url, data) {
+        try {
+            debug(`Отправка запроса на: ${url}`);
+            debug(`Данные запроса: ${JSON.stringify(data)}`);
+
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json',
+                           'Access-Control-Allow-Origin': '*'},
+                body: JSON.stringify(data),
+                credentials: 'same-origin'
+            });
+
+            debug(`Статус ответа: ${response.status}`);
+            const responseData = await response.json();
+            debug(`Данные ответа: ${JSON.stringify(responseData)}`);
+
+            if (!response.ok) {
+                throw new Error(responseData.message || 'Произошла ошибка');
+            }
+
+            return responseData;
+        } catch (error) {
+            debug(`Ошибка: ${error.message}`);
+            throw error;
+        }
+    }
+
+    function showMessage(message, isError = false) {
+        document.getElementById('message').textContent = message;
+        document.getElementById('message').className = isError ? 'error' : 'success';
+    }
+
+    function debug(message) {
+        const debugElement = document.getElementById('debug');
+        debugElement.textContent += message + '\n';
+    }
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const login = document.getElementById('registerLogin').value;
+        const password = document.getElementById('registerPassword').value;
+        try {
+            const data = await sendRequest(`${API_URL}/register`, { login, password });
+            showMessage('Регистрация успешна');
+            debug('Зарегистрированный пользователь: ' + JSON.stringify(data));
+        } catch (error) {
+            showMessage(`Ошибка при регистрации: ${error.message}`, true);
+        }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const login = document.getElementById('loginLogin').value;
+        const password = document.getElementById('loginPassword').value;
+        try {
+            const data = await sendRequest(`${API_URL}/login`, { login, password });
+            showMessage('Вход выполнен успешно');
+            debug('Ответ входа: ' + JSON.stringify(data));
+            if (data.data && data.data.accessToken) {
+                localStorage.setItem('accessToken', data.data.accessToken);
+                debug('Токен доступа сохранен');
+                window.location.href = '/order.html';
+            }
+        } catch (error) {
+            showMessage(`Ошибка при входе: ${error.message}`, true);
+        }
+    });
+
+</script>
+</body>
+</html>
