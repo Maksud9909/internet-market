@@ -46,8 +46,8 @@
             font-size: 16px;
             transition: background-color 0.3s ease;
             position: absolute; /* Используем абсолютное позиционирование */
-            top: 20px; /* Располагаем кнопку на 20px от верхнего края */
-            right: 20px; /* Располагаем кнопку на 20px от правого края */
+            top: 20px;
+            right: 20px;
         }
 
         #updateUserBtn:hover {
@@ -59,7 +59,7 @@
 <h1>Добро пожаловать</h1>
 <button onclick="window.location.href='product.html'">Все товары</button>
 <button onclick="window.location.href='order.html'">Заказы</button>
-<button id="updateUserBtn">Обновить данные пользователя</button> <!-- Кнопка для перехода на update-user.html -->
+<button id="updateUserBtn">Обновить данные пользователя</button>
 <script>
     document.getElementById('updateUserBtn').addEventListener('click', () => {
         window.location.href = '/update-user.html';

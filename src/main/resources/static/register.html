@@ -127,7 +127,6 @@
             const data = await sendRequest(`${API_URL}/register`, {login, password});
             showMessage('Аккаунт создан, перенаправление...');
 
-            // Перенаправляем пользователя на страницу входа через 2 секунды
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 2000);

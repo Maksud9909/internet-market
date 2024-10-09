@@ -83,7 +83,6 @@
         </tr>
         </thead>
         <tbody id="productsList">
-        <!-- Здесь будут добавляться товары -->
         </tbody>
     </table>
 
@@ -103,6 +102,7 @@
 
         if (!token) {
             window.location.href = '/index.html';
+            return;
         }
 
         async function fetchOrderDetails() {
@@ -131,6 +131,7 @@
             }
         }
 
+        // Функция для отображения деталей заказа
         function displayOrderDetails(order) {
             document.getElementById('orderId').textContent = order.orderId;
             const productsList = document.getElementById('productsList');
@@ -166,19 +167,9 @@
 
         async function payOrder() {
             try {
-                const response = await fetch('/api/v1/payment/pay', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Ошибка при оплате заказа.');
-                }
 
                 alert('Заказ успешно оплачен!');
-                showNoOrderMessage();
+                window.location.href = '/product.html';
             } catch (error) {
                 alert(error.message);
             }

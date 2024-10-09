@@ -19,7 +19,7 @@ public class ProductMapper implements Mapper<ProductCreateDTO, ProductDTO, Produ
 
     @Override
     public Product toEntity(ProductCreateDTO dto) {
-        Category category = categoryRepository.loadById(dto.categoryId(),"Category not found");
+        Category category = categoryRepository.loadById(dto.categoryId(), "Category not found");
 
         return Product.builder()
                 .category(category)
@@ -31,7 +31,7 @@ public class ProductMapper implements Mapper<ProductCreateDTO, ProductDTO, Produ
 
     @Override
     public ProductDTO toDTO(Product product) {
-        Category category = categoryRepository.loadById(product.getCategory().getCategoryId(),"Category not found");
+        Category category = categoryRepository.loadById(product.getCategory().getCategoryId(), "Category not found");
         return ProductDTO.builder()
                 .productId(product.getProductId())
                 .categoryId(product.getCategory().getCategoryId())
@@ -41,6 +41,7 @@ public class ProductMapper implements Mapper<ProductCreateDTO, ProductDTO, Produ
                 .price(product.getPrice())
                 .build();
     }
+
     public List<ProductDTO> toDTOList(List<Product> products) {
         return products.stream()
                 .map(this::toDTO)

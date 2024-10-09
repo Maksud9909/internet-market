@@ -43,7 +43,7 @@
         .product-image {
             width: 100%;
             height: 200px;
-            object-fit: contain; /* Изображение будет подогнано под размер контейнера, сохраняя свои пропорции */
+            object-fit: contain; /* фото подогнано*/
             border-radius: 8px;
         }
 
@@ -107,7 +107,6 @@
 
                 let imageUrl;
 
-                // Хардкодим пути к картинкам на основе productId
                 switch (product.productId) {
                     case 10:
                         imageUrl = "/images/10.png";
@@ -128,7 +127,7 @@
                         imageUrl = "/images/5.png";
                         break;
                     default:
-                        imageUrl = "/images/10.png"; // В случае, если id продукта не найден
+                        imageUrl = "/images/10.png";
                 }
 
                 productCard.innerHTML = `
@@ -143,12 +142,12 @@
                 productsList.appendChild(productCard);
             });
 
-            // Добавляем обработчики событий для кнопок
+
             const addToOrderButtons = document.querySelectorAll('.add-to-order');
             addToOrderButtons.forEach(button => {
                 button.addEventListener('click', async function() {
                     const productId = this.getAttribute('data-product-id');
-                    const quantityInput = this.previousElementSibling; // Получаем элемент ввода количества
+                    const quantityInput = this.previousElementSibling;
                     const quantity = quantityInput.value;
 
                     if (quantity <= 0) {

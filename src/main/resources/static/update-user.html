@@ -92,7 +92,7 @@
                 }
 
                 const userData = await response.json();
-                document.getElementById('login').value = userData.data.login; // Предположим, что это поле есть
+                document.getElementById('login').value = userData.data.login;
             } catch (error) {
                 alert(error.message);
                 localStorage.removeItem('accessToken');
@@ -131,7 +131,7 @@
             }
         });
 
-        fetchUserDetails(); // Получаем детали пользователя при загрузке страницы
+        fetchUserDetails();
     });
 </script>
 </body>

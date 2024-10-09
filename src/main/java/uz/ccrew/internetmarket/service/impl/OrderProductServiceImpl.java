@@ -38,7 +38,6 @@ public class OrderProductServiceImpl implements OrderProductService {
     public OrderProductDTO addProductToOrder(OrderProductCreateDTO dto) {
         User user = authUtil.loadLoggedUser();
         Optional<Order> order = orderRepository.findByUserAndStatus(user, Status.PENDING);
-//        Order order = orderRepository.findByOrderIdAndUserId(dto.orderId(), user.getId());
 
         if (order.isEmpty()) {
             throw new NotFoundException("Order not found");
@@ -91,11 +90,8 @@ public class OrderProductServiceImpl implements OrderProductService {
             throw new NotFoundException("Order not found");
         }
 
-
-        // Извлекаем все OrderProducts для заказа пользователя
         List<OrderProducts> orderProducts = orderProductRepository.findAllByOrder(order.get());
 
-        // Преобразуем в DTO
         List<ProductDTO> productDTOs = orderProducts.stream()
                 .map(orderProduct -> ProductDTO.builder()
                         .productId(orderProduct.getProduct().getProductId())
@@ -103,8 +99,8 @@ public class OrderProductServiceImpl implements OrderProductService {
                         .categoryName(orderProduct.getProduct().getCategory().getCategoryName())
                         .productName(orderProduct.getProduct().getProductName())
                         .description(orderProduct.getProduct().getDescription())
-                        .quantity(orderProduct.getQuantity()) // Извлекаем количество
-                        .price(orderProduct.getPrice()) // Извлекаем цену (цена за всё количество)
+                        .quantity(orderProduct.getQuantity())
+                        .price(orderProduct.getPrice())
                         .build())
                 .collect(Collectors.toList());
 
@@ -113,5 +109,4 @@ public class OrderProductServiceImpl implements OrderProductService {
                 .products(productDTOs)
                 .build();
     }
-
 }

@@ -109,7 +109,7 @@
                 }
 
                 const orders = await response.json();
-                console.log('Orders Response:', orders); // Логируем весь ответ
+                console.log('Orders Response:', orders);
                 displayOrders(orders.data.content);
             } catch (error) {
                 alert(error.message);
@@ -132,7 +132,7 @@
                 }
 
                 alert('Заказ был удалён');
-                fetchOrders(); // Обновляем список заказов после удаления
+                fetchOrders();
             } catch (error) {
                 alert(error.message);
             }
