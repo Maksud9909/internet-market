@@ -8,4 +8,5 @@ public record ProductDTO(Long productId,
                          String categoryName,
                          String productName,
                          String description,
+                         Long quantity,
                          Double price) {}

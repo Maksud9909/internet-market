@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заказы</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9f9f9;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+            text-align: center;
+        }
+
+        #createOrderBtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 0 auto 20px;
+        }
+
+        #createOrderBtn:hover {
+            background-color: #45a049;
+        }
+
+        #ordersList {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            background-color: #f1f1f1;
+            transition: background-color 0.3s ease;
+        }
+
+        .order-container:hover {
+            background-color: #ddd;
+        }
+
+        .order-link {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .order-id {
+            font-weight: bold;
+        }
+
+        .delete-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+<h1>Заказы</h1>
+
+<button id="createOrderBtn">Создать заказ</button>
+<div id="ordersList"></div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            window.location.href = '/index.html';
+        }
+
+        async function fetchOrders() {
+            try {
+                const response = await fetch('/api/v1/order/get/list', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка авторизации. Перейдите на страницу входа.');
+                }
+
+                const orders = await response.json();
+                console.log('Orders Response:', orders);
+                displayOrders(orders.data.content);
+            } catch (error) {
+                alert(error.message);
+                localStorage.removeItem('accessToken');
+                window.location.href = '/index.html';
+            }
+        }
+
+        async function deleteOrder() {
+            try {
+                const response = await fetch('/api/v1/order/delete', {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка удаления заказа.');
+                }
+
+                alert('Заказ был удалён');
+                fetchOrders();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        function displayOrders(orders) {
+            const ordersList = document.getElementById('ordersList');
+            ordersList.innerHTML = ''; // Очищаем предыдущие данные
+
+            if (orders.length === 0) {
+                ordersList.innerHTML = '<p>У вас нет заказов.</p>';
+                return;
+            }
+
+            orders.forEach(order => {
+                const orderContainer = document.createElement('div');
+                orderContainer.classList.add('order-container');
+
+                const orderLink = document.createElement('a');
+                orderLink.classList.add('order-link');
+                orderLink.href = `/order-details.html?id=${order.orderId}`;
+                orderLink.innerHTML = `<span class="order-id">Заказ № ${order.orderId}</span>`;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.classList.add('delete-btn');
+                deleteBtn.textContent = 'Удалить';
+
+                // Добавляем слушатель для удаления заказа
+                deleteBtn.addEventListener('click', () => {
+                    if (confirm('Вы уверены, что хотите удалить заказ?')) {
+                        deleteOrder(); // Удаление заказа
+                    }
+                });
+
+                orderContainer.appendChild(orderLink);
+                orderContainer.appendChild(deleteBtn);
+                ordersList.appendChild(orderContainer);
+            });
+        }
+
+        document.getElementById('createOrderBtn').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/v1/order/create/order', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Исправлено
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка создания заказа. Авторизация не пройдена.');
+                }
+
+                fetchOrders(); // Обновляем список заказов после создания нового
+            } catch (error) {
+                alert(error.message);
+                localStorage.removeItem('accessToken');
+                window.location.href = '/index.html';
+            }
+        });
+
+        fetchOrders();
+    });
+</script>
+</body>
+</html>

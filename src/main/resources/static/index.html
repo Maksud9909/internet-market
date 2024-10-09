@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f9f9f9, #e0e0e0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        a {
+            font-size: 14px;
+            color: #555;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        #message {
+            margin-top: 15px;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Вход</h1>
+    <form id="loginForm">
+        <input type="text" id="loginLogin" placeholder="Логин" required>
+        <input type="password" id="loginPassword" placeholder="Пароль" required>
+        <button type="submit">Войти</button>
+    </form>
+    <a href="register.html">Create an account</a>
+    <div id="message"></div>
+</div>
+
+<script>
+    const API_URL = '/api/v1/auth';
+
+    async function sendRequest(url, data) {
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+                credentials: 'same-origin'
+            });
+
+            const responseData = await response.json();
+
+            if (!response.ok) {
+                throw new Error(responseData.message || 'Произошла ошибка');
+            }
+
+            return responseData;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    function showMessage(message, isError = false) {
+        document.getElementById('message').textContent = message;
+        document.getElementById('message').className = isError ? 'error' : 'success';
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const login = document.getElementById('loginLogin').value;
+        const password = document.getElementById('loginPassword').value;
+        try {
+            const data = await sendRequest(`${API_URL}/login`, { login, password });
+            showMessage('Вход выполнен успешно');
+            if (data.data && data.data.accessToken) {
+                localStorage.setItem('accessToken', data.data.accessToken);
+                window.location.href = '/basic.html';
+            }
+        } catch (error) {
+            showMessage(`Ошибка при входе: ${error.message}`, true);
+        }
+    });
+</script>
+</body>
+</html>

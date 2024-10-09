@@ -8,8 +8,8 @@ import uz.ccrew.internetmarket.dto.product.ProductDTO;
 import uz.ccrew.internetmarket.service.ProductService;
 import uz.ccrew.internetmarket.dto.product.ProductCreateDTO;
 import uz.ccrew.internetmarket.dto.product.ProductUpdateDTO;
-import uz.ccrew.internetmarket.repository.CategoryRepository;
 import uz.ccrew.internetmarket.repository.ProductRepository;
+import uz.ccrew.internetmarket.repository.CategoryRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -20,9 +20,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
-
-    private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
     @Override

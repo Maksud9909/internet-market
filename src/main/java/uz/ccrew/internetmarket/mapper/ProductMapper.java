@@ -9,6 +9,9 @@ import uz.ccrew.internetmarket.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class ProductMapper implements Mapper<ProductCreateDTO, ProductDTO, Product> {
@@ -16,7 +19,7 @@ public class ProductMapper implements Mapper<ProductCreateDTO, ProductDTO, Produ
 
     @Override
     public Product toEntity(ProductCreateDTO dto) {
-        Category category = categoryRepository.loadById(dto.categoryId(),"Category not found");
+        Category category = categoryRepository.loadById(dto.categoryId(), "Category not found");
 
         return Product.builder()
                 .category(category)
@@ -28,7 +31,7 @@ public class ProductMapper implements Mapper<ProductCreateDTO, ProductDTO, Produ
 
     @Override
     public ProductDTO toDTO(Product product) {
-        Category category = categoryRepository.loadById(product.getCategory().getCategoryId(),"Category not found");
+        Category category = categoryRepository.loadById(product.getCategory().getCategoryId(), "Category not found");
         return ProductDTO.builder()
                 .productId(product.getProductId())
                 .categoryId(product.getCategory().getCategoryId())
@@ -37,5 +40,11 @@ public class ProductMapper implements Mapper<ProductCreateDTO, ProductDTO, Produ
                 .productName(product.getProductName())
                 .price(product.getPrice())
                 .build();
+    }
+
+    public List<ProductDTO> toDTOList(List<Product> products) {
+        return products.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 }

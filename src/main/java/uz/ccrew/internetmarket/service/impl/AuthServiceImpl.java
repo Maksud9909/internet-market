@@ -27,12 +27,12 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-    private final AuthenticationManager authenticationManager;
+    private final AuthUtil authUtil;
+    private final UserMapper userMapper;
     private final JWTService jwtService;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final UserMapper userMapper;
-    private final AuthUtil authUtil;
+    private final AuthenticationManager authenticationManager;
 
 
     @Override
