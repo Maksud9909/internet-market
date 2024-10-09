@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход</title>
+    <title>Регистрация</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -80,13 +80,13 @@
 </head>
 <body>
 <div class="container">
-    <h1>Вход</h1>
-    <form id="loginForm">
-        <input type="text" id="loginLogin" placeholder="Логин" required>
-        <input type="password" id="loginPassword" placeholder="Пароль" required>
-        <button type="submit">Войти</button>
+    <h1>Регистрация</h1>
+    <form id="registerForm">
+        <input type="text" id="registerLogin" placeholder="Логин" required>
+        <input type="password" id="registerPassword" placeholder="Пароль" required>
+        <button type="submit">Зарегистрироваться</button>
     </form>
-    <a href="register.html">Create an account</a>
+    <a href="index.html">Уже есть аккаунт? Войти</a>
     <div id="message"></div>
 </div>
 
@@ -97,7 +97,7 @@
         try {
             const response = await fetch(url, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data),
                 credentials: 'same-origin'
             });
@@ -119,21 +119,23 @@
         document.getElementById('message').className = isError ? 'error' : 'success';
     }
 
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const login = document.getElementById('loginLogin').value;
-        const password = document.getElementById('loginPassword').value;
+        const login = document.getElementById('registerLogin').value;
+        const password = document.getElementById('registerPassword').value;
         try {
-            const data = await sendRequest(`${API_URL}/login`, { login, password });
-            showMessage('Вход выполнен успешно');
-            if (data.data && data.data.accessToken) {
-                localStorage.setItem('accessToken', data.data.accessToken);
-                window.location.href = '/basic.html';
-            }
+            const data = await sendRequest(`${API_URL}/register`, {login, password});
+            showMessage('Аккаунт создан, перенаправление...');
+
+            // Перенаправляем пользователя на страницу входа через 2 секунды
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2000);
         } catch (error) {
-            showMessage(`Ошибка при входе: ${error.message}`, true);
+            showMessage(`Ошибка при регистрации: ${error.message}`, true);
         }
     });
+
 </script>
 </body>
 </html>

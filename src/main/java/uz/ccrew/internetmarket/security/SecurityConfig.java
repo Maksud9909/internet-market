@@ -1,6 +1,5 @@
 package uz.ccrew.internetmarket.security;
 
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import uz.ccrew.internetmarket.security.jwt.JWTAuthenticationFilter;
 import uz.ccrew.internetmarket.security.user.UserAuthenticationEntryPoint;
 
@@ -11,14 +10,15 @@ import org.springframework.security.config.Customizer;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -32,9 +32,10 @@ import java.util.Arrays;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final UserDetailsService userDetailsService;
     private final JWTAuthenticationFilter authenticationFilter;
     private final UserAuthenticationEntryPoint authenticationEntryPoint;
-    private final UserDetailsService userDetailsService;
+
     private static final String[] SWAGGER_WHITELIST = {
             "/v2/api-docs",
             "/configuration/ui",
@@ -45,6 +46,17 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/swagger-resources",
             "/swagger-resources/**"
+    };
+
+    private static final String[] FRONTEND_WHITELIST = {
+            "/index.html",
+            "/order.html",
+            "/register.html",
+            "/update-user.html",
+            "/basic.html",
+            "/product.html",
+            "/images/*",
+            "order-details.html"
     };
 
     @Bean
@@ -77,7 +89,7 @@ public class SecurityConfig {
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth.requestMatchers(SWAGGER_WHITELIST).permitAll()
                         .requestMatchers("/api/v1/auth/register", "/api/v1/auth/login").permitAll()
-                        .requestMatchers("/g", "/index.html", "/static/**").permitAll()
+                        .requestMatchers(FRONTEND_WHITELIST).permitAll()
                         .anyRequest().authenticated());
         return httpSecurity.build();
     }

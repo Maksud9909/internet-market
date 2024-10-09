@@ -1,10 +1,10 @@
 package uz.ccrew.internetmarket.controller;
 
-
 import uz.ccrew.internetmarket.dto.Response;
 import uz.ccrew.internetmarket.dto.ResponseMaker;
 import uz.ccrew.internetmarket.service.OrderProductService;
 import uz.ccrew.internetmarket.dto.orderProduct.OrderProductDTO;
+import uz.ccrew.internetmarket.dto.orderProduct.OrderProductList;
 import uz.ccrew.internetmarket.dto.orderProduct.OrderProductCreateDTO;
 
 import lombok.RequiredArgsConstructor;
@@ -26,16 +26,24 @@ public class OrderProductController {
     @PostMapping("/addProduct")
     @Operation(summary = "Add product to order")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-    public ResponseEntity<Response<OrderProductDTO>> addOrderProduct(@RequestBody OrderProductCreateDTO dto) {
+    public ResponseEntity<Response<OrderProductDTO>> addProduct(@RequestBody OrderProductCreateDTO dto) {
         OrderProductDTO result = orderProductService.addProductToOrder(dto);
         return ResponseMaker.ok(result);
     }
 
-    @DeleteMapping("/delete/{orderId}/{productId}")
+    @DeleteMapping("/delete/{productId}")
     @Operation(summary = "Delete product from order")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-    public ResponseEntity<Response<?>> delete(@PathVariable("orderId") Long orderId, @PathVariable("productId") Long productId) {
-        orderProductService.deleteProductById(orderId, productId);
+    public ResponseEntity<Response<?>> delete(@PathVariable("productId") Long productId) {
+        orderProductService.deleteProductById(productId);
         return ResponseMaker.okMessage("Product deleted successfully from order");
+    }
+
+    @GetMapping("/get/order/products")
+    @Operation(summary = "Get all products in order")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    public ResponseEntity<Response<OrderProductList>> getOrderProducts() {
+        OrderProductList result = orderProductService.findAllProductsInOrder();
+        return ResponseMaker.ok(result);
     }
 }

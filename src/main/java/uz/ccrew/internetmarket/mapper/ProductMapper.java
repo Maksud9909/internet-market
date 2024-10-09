@@ -9,6 +9,9 @@ import uz.ccrew.internetmarket.repository.CategoryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class ProductMapper implements Mapper<ProductCreateDTO, ProductDTO, Product> {
@@ -37,5 +40,10 @@ public class ProductMapper implements Mapper<ProductCreateDTO, ProductDTO, Produ
                 .productName(product.getProductName())
                 .price(product.getPrice())
                 .build();
+    }
+    public List<ProductDTO> toDTOList(List<Product> products) {
+        return products.stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
     }
 }

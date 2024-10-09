@@ -1,7 +1,6 @@
 package uz.ccrew.internetmarket.mapper;
 
 import uz.ccrew.internetmarket.entity.OrderProducts;
-import uz.ccrew.internetmarket.repository.ProductRepository;
 import uz.ccrew.internetmarket.dto.orderProduct.OrderProductDTO;
 import uz.ccrew.internetmarket.dto.orderProduct.OrderProductCreateDTO;
 
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class OrderProductMapper implements Mapper<OrderProductCreateDTO, OrderProductDTO, OrderProducts> {
-    private final ProductRepository productRepository;
 
     @Override
     public OrderProducts toEntity(OrderProductCreateDTO orderProductCreateDTO) {
@@ -21,7 +19,6 @@ public class OrderProductMapper implements Mapper<OrderProductCreateDTO, OrderPr
 
     @Override
     public OrderProductDTO toDTO(OrderProducts orderProduct) {
-
         return OrderProductDTO.builder()
                 .orderId(orderProduct.getId())
                 .productName(orderProduct.getProduct().getProductName())

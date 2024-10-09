@@ -8,11 +8,11 @@ import org.springframework.data.domain.Page;
 public interface OrderService {
     OrderDTO create();
 
-    OrderDTO getById(Long id);
+    OrderDTO get();
 
     Page<OrderDTO> getList(int page, int size);
 
-    void delete(Long id);
+    void delete();
 
     void changeStatus(Long id, Status status);
 }

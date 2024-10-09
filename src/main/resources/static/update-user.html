@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обновление пользователя</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9f9f9;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+            text-align: center;
+        }
+
+        #updateUserForm {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #updateBtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+
+        #updateBtn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+<h1>Обновление вашего профиля</h1>
+
+<div id="updateUserForm">
+    <label for="login">Логин:</label>
+    <input type="text" id="login" placeholder="Введите ваш логин">
+
+    <label for="password">Пароль:</label>
+    <input type="password" id="password" placeholder="Введите ваш пароль">
+
+    <button id="updateBtn">Обновить</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            window.location.href = '/index.html';
+        }
+
+        async function fetchUserDetails() {
+            try {
+                const response = await fetch('/api/v1/user/get', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка авторизации. Перейдите на страницу входа.');
+                }
+
+                const userData = await response.json();
+                document.getElementById('login').value = userData.data.login; // Предположим, что это поле есть
+            } catch (error) {
+                alert(error.message);
+                localStorage.removeItem('accessToken');
+                window.location.href = '/index.html';
+            }
+        }
+
+        document.getElementById('updateBtn').addEventListener('click', async () => {
+            const login = document.getElementById('login').value;
+            const password = document.getElementById('password').value;
+
+            const userUpdateData = {
+                login: login,
+                password: password
+            };
+
+            try {
+                const response = await fetch('/api/v1/user/update', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userUpdateData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка обновления пользователя. Проверьте введенные данные.');
+                }
+
+                alert('Данные успешно обновлены.');
+            } catch (error) {
+                alert(error.message);
+                localStorage.removeItem('accessToken');
+                window.location.href = '/index.html';
+            }
+        });
+
+        fetchUserDetails(); // Получаем детали пользователя при загрузке страницы
+    });
+</script>
+</body>
+</html>

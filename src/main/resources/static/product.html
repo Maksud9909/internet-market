@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Товары</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9f9f9;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            color: #333;
+        }
+
+        #productsList {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: contain; /* Изображение будет подогнано под размер контейнера, сохраняя свои пропорции */
+            border-radius: 8px;
+        }
+
+        .product-name {
+            font-size: 20px;
+            margin: 15px 0;
+        }
+
+        .product-description {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .product-price {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+<h1>Список товаров</h1>
+<div id="productsList"></div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', async function() {
+        const token = localStorage.getItem('accessToken');
+        if (!token) {
+            window.location.href = '/index.html';
+            return;
+        }
+
+        async function fetchProducts() {
+            try {
+                const response = await fetch('/api/v1/product/get/list', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка при загрузке товаров.');
+                }
+
+                const result = await response.json();
+                displayProducts(result.data.content);
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        function displayProducts(products) {
+            const productsList = document.getElementById('productsList');
+            productsList.innerHTML = ''; // Очищаем предыдущие данные
+
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('product-card');
+
+                let imageUrl;
+
+                // Хардкодим пути к картинкам на основе productId
+                switch (product.productId) {
+                    case 10:
+                        imageUrl = "/images/10.png";
+                        break;
+                    case 1:
+                        imageUrl = "/images/1.png";
+                        break;
+                    case 2:
+                        imageUrl = "/images/4.png";
+                        break;
+                    case 3:
+                        imageUrl = "/images/2.png";
+                        break;
+                    case 4:
+                        imageUrl = "/images/3.png";
+                        break;
+                    case 5:
+                        imageUrl = "/images/5.png";
+                        break;
+                    default:
+                        imageUrl = "/images/10.png"; // В случае, если id продукта не найден
+                }
+
+                productCard.innerHTML = `
+                    <img src="${imageUrl}" alt="${product.productName}" class="product-image">
+                    <div class="product-name">${product.productName}</div>
+                    <div class="product-description">${product.description}</div>
+                    <div class="product-price">${product.price} $</div>
+                    <input type="number" min="1" value="1" class="quantity-input" data-product-id="${product.productId}" />
+                    <button class="add-to-order" data-product-id="${product.productId}">Добавить в заказ</button>
+                `;
+
+                productsList.appendChild(productCard);
+            });
+
+            // Добавляем обработчики событий для кнопок
+            const addToOrderButtons = document.querySelectorAll('.add-to-order');
+            addToOrderButtons.forEach(button => {
+                button.addEventListener('click', async function() {
+                    const productId = this.getAttribute('data-product-id');
+                    const quantityInput = this.previousElementSibling; // Получаем элемент ввода количества
+                    const quantity = quantityInput.value;
+
+                    if (quantity <= 0) {
+                        alert('Количество должно быть больше нуля.');
+                        return;
+                    }
+
+                    await addProductToOrder(productId, quantity);
+                });
+            });
+        }
+
+        async function addProductToOrder(productId, quantity) {
+            try {
+                const response = await fetch('/api/v1/orderProduct/addProduct', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        productId: productId,
+                        quantity: parseInt(quantity) // Приводим к числу
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка при добавлении товара в заказ.');
+                }
+
+                const result = await response.json();
+                alert('Товар успешно добавлен в заказ!');
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        fetchProducts();
+    });
+</script>
+</body>
+</html>

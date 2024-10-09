@@ -31,11 +31,11 @@ public class OrderController {
         return ResponseMaker.ok(result);
     }
 
-    @GetMapping("/get/order/{id}")
+    @GetMapping("/get/order")
     @Operation(summary = "Get an order")
     @PreAuthorize("hasAnyAuthority('CUSTOMER')")
-    public ResponseEntity<Response<OrderDTO>> getById(@PathVariable("id") Long id) {
-        OrderDTO result = orderService.getById(id);
+    public ResponseEntity<Response<OrderDTO>> get() {
+        OrderDTO result = orderService.get();
         return ResponseMaker.ok(result);
     }
 
@@ -54,5 +54,13 @@ public class OrderController {
                                                             @RequestParam(value = "size", defaultValue = "10", required = false) int size) {
         Page<OrderDTO> result = orderService.getList(page, size);
         return ResponseMaker.ok(result);
+    }
+
+    @DeleteMapping("/delete")
+    @Operation(summary = "Delete order")
+    @PreAuthorize("hasAnyAuthority('CUSTOMER')")
+    public ResponseEntity<Response<?>> delete() {
+        orderService.delete();
+        return ResponseMaker.okMessage("Order has been deleted");
     }
 }

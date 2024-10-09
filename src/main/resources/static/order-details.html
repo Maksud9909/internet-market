@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детали заказа</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9f9f9;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+            text-align: center;
+        }
+
+        #productsTable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        #productsTable th, #productsTable td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        #productsTable th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        #totalPrice {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        #payButton, #createOrderButton {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #payButton:hover, #createOrderButton:hover {
+            background-color: #45a049;
+        }
+
+        #noOrderMessage {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Детали заказа №<span id="orderId"></span></h1>
+
+<div id="orderContent">
+    <table id="productsTable">
+        <thead>
+        <tr>
+            <th>Название товара</th>
+            <th>Категория</th>
+            <th>Количество</th>
+            <th>Цена за штуку</th>
+            <th>Итоговая цена</th>
+        </tr>
+        </thead>
+        <tbody id="productsList">
+        <!-- Здесь будут добавляться товары -->
+        </tbody>
+    </table>
+
+    <p id="totalPrice">Итоговая стоимость: 0 $</p>
+
+    <button id="payButton">Оплатить заказ</button>
+</div>
+
+<div id="noOrderMessage" style="display: none;">
+    <p>У вас нет активного заказа.</p>
+    <button id="createOrderButton">Создать новый заказ</button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const token = localStorage.getItem('accessToken');
+
+        if (!token) {
+            window.location.href = '/index.html';
+        }
+
+        async function fetchOrderDetails() {
+            try {
+                const response = await fetch('/api/v1/orderProduct/get/order/products', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        showNoOrderMessage();
+                        return;
+                    }
+                    throw new Error('Ошибка при получении деталей заказа.');
+                }
+
+                const orderData = await response.json();
+                displayOrderDetails(orderData.data);
+            } catch (error) {
+                alert(error.message);
+                localStorage.removeItem('accessToken');
+                window.location.href = '/index.html';
+            }
+        }
+
+        function displayOrderDetails(order) {
+            document.getElementById('orderId').textContent = order.orderId;
+            const productsList = document.getElementById('productsList');
+            productsList.innerHTML = '';
+            let totalPrice = 0;
+
+            order.products.forEach(product => {
+                const row = document.createElement('tr');
+
+                const priceForProduct = product.price * product.quantity;
+                totalPrice += priceForProduct;
+
+                row.innerHTML = `
+                    <td>${product.productName}</td>
+                    <td>${product.categoryName}</td>
+                    <td>${product.quantity}</td>
+                    <td>${product.price} $</td>
+                    <td>${priceForProduct} $</td>
+                `;
+
+                productsList.appendChild(row);
+            });
+
+            document.getElementById('totalPrice').textContent = `Итоговая стоимость: ${totalPrice} $`;
+            document.getElementById('orderContent').style.display = 'block';
+            document.getElementById('noOrderMessage').style.display = 'none';
+        }
+
+        function showNoOrderMessage() {
+            document.getElementById('orderContent').style.display = 'none';
+            document.getElementById('noOrderMessage').style.display = 'block';
+        }
+
+        async function payOrder() {
+            try {
+                const response = await fetch('/api/v1/payment/pay', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка при оплате заказа.');
+                }
+
+                alert('Заказ успешно оплачен!');
+                showNoOrderMessage();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        async function createNewOrder() {
+            try {
+                const response = await fetch('/api/v1/order/create/order', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Ошибка при создании нового заказа.');
+                }
+
+                alert('Новый заказ успешно создан!');
+                fetchOrderDetails();
+            } catch (error) {
+                alert(error.message);
+            }
+        }
+
+        document.getElementById('payButton').addEventListener('click', payOrder);
+        document.getElementById('createOrderButton').addEventListener('click', createNewOrder);
+
+        fetchOrderDetails();
+    });
+</script>
+
+</body>
+</html>
